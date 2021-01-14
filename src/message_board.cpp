@@ -32,3 +32,19 @@ bool message_board::operator==(const message_board &rhs) const {
 bool message_board::operator!=(const message_board &rhs) const {
     return !(rhs == *this);
 }
+
+unsigned int message_board::Post(std::string basicString, std::string basicString1) {
+    return 0;
+}
+
+unsigned int message_board::Count(std::string basicString) {
+    return 0;
+}
+
+std::string message_board::List() {
+    return std::string();
+}
+
+std::string message_board::Read(std::string basicString, int i) {
+    return std::string();
+}

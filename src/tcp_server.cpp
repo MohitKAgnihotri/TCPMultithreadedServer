@@ -153,30 +153,11 @@ pipe_ret_t TcpServer::start(int port) {
  * mode (async) and will quit after timeout seconds if no client tried to connect.
  * Return accepted client
  */
-Client TcpServer::acceptClient(uint timeout) {
-    socklen_t sosize  = sizeof(m_clientAddress);
+Client TcpServer::acceptClient(void) {
+    socklen_t sosize = sizeof(m_clientAddress);
     Client newClient;
 
-    if (timeout > 0) {
-        struct timeval tv;
-        tv.tv_sec = 2;
-        tv.tv_usec = 0;
-        FD_ZERO(&m_fds);
-        FD_SET(m_sockfd, &m_fds);
-        int selectRet = select(m_sockfd + 1, &m_fds, NULL, NULL, &tv);
-        if (selectRet == -1) { // select failed
-            newClient.setErrorMessage(strerror(errno));
-            return newClient;
-        } else if (selectRet == 0) { // timeout
-            newClient.setErrorMessage("Timeout waiting for client");
-            return newClient;
-        } else if (!FD_ISSET(m_sockfd, &m_fds)) { // no new client
-            newClient.setErrorMessage("File descriptor is not set");
-            return newClient;
-        }
-    }
-
-    int file_descriptor = accept(m_sockfd, (struct sockaddr*)&m_clientAddress, &sosize);
+    int file_descriptor = accept(m_sockfd, (struct sockaddr *) &m_clientAddress, &sosize);
     if (file_descriptor == -1) { // accept failed
         newClient.setErrorMessage(strerror(errno));
         return newClient;
@@ -187,7 +168,6 @@ Client TcpServer::acceptClient(uint timeout) {
     newClient.setIp(inet_ntoa(m_clientAddress.sin_addr));
     m_clients.push_back(newClient);
     m_clients.back().setThreadHandler(std::bind(&TcpServer::receiveTask, this));
-
     return newClient;
 }
 

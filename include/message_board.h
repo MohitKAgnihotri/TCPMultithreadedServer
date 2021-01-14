@@ -10,18 +10,27 @@
 class message_board {
     std::vector<topic> _message_board;
 public:
-        const std::vector<topic> &getMessageBoard() const {
+    const std::vector<topic> &getMessageBoard() const {
         return _message_board;
     }
 
     bool isTopicExist(std::string topic);
-    topic getTopic (std::string);
+
+    topic getTopic(std::string);
+
     void createNewTopic(std::string);
 
     bool operator==(const message_board &rhs) const;
 
     bool operator!=(const message_board &rhs) const;
 
+    unsigned int Post(std::string basicString, std::string basicString1);
+
+    std::string List();
+
+    unsigned int Count(std::string basicString);
+
+    std::string Read(std::string basicString, int i);
 };
 
 
