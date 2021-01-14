@@ -13,7 +13,7 @@ class topic {
     std::string _topic;
     std::vector<post> posts;
 public:
-    explicit topic(std::string topic) : _topic(std::move(topic)) {}
+    topic(std::string topic) : _topic(std::move(topic)) {}
 
     const std::string &getTopic() const {
         return _topic;
