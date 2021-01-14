@@ -14,26 +14,31 @@ int main()
     my_message_board.isTopicExist("test");
     my_message_board.createNewTopic("test");
     topic curr_topic = my_message_board.getTopic("test");
+    std::cout << "Number of post" << curr_topic.getNumberofPost();
+    while (curr_topic.getNumberofPost() < 10)
+        curr_topic.insertPost(curr_topic.getNumberofPost(), "test-test");
+    std::cout << curr_topic.getPost(0) << std::endl;
+    std::cout << curr_topic.getPost(7) << std::endl;
 
 
-	std::vector<std::string> requestList =
-	{
-		"POST@Solar system#The dark side of the @moon is #dark.",
-		"POST@#x",
-		"POST@night_sky#cloudy!",
-		"POST@Solar system#Mercury, Venus, Earth, Mars, Jupiter, Saturn, Neptune, Uranus",
-		"LIST",
-		"COUNT@Solar system",
-		"COUNT@solar_system",
-		"READ@#0",
-		"READ@Solar system#1",
-		"READ@night_sky#2",
-		"READ@solar_system#0",
-		"EXIT",
-		"AAA"
-	};
+    std::vector<std::string> requestList =
+            {
+                    "POST@Solar system#The dark side of the @moon is #dark.",
+                    "POST@#x",
+                    "POST@night_sky#cloudy!",
+                    "POST@Solar system#Mercury, Venus, Earth, Mars, Jupiter, Saturn, Neptune, Uranus",
+                    "LIST",
+                    "COUNT@Solar system",
+                    "COUNT@solar_system",
+                    "READ@#0",
+                    "READ@Solar system#1",
+                    "READ@night_sky#2",
+                    "READ@solar_system#0",
+                    "EXIT",
+                    "AAA"
+            };
 
-	for (std::string & request : requestList)
+    for (std::string &request : requestList)
 	{
 		PostRequest post = PostRequest::parse(request);
 		if (post.valid)

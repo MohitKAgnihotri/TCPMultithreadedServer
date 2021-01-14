@@ -5,13 +5,15 @@
 #ifndef TCP_CLIENT_SERVER_TOPIC_H
 #define TCP_CLIENT_SERVER_TOPIC_H
 
+#include <utility>
+
 #include "post.h"
 
 class topic {
     std::string _topic;
     std::vector<post> posts;
 public:
-    topic(const std::string &topic) : _topic(topic) {}
+    explicit topic(std::string topic) : _topic(std::move(topic)) {}
 
     const std::string &getTopic() const {
         return _topic;
@@ -21,8 +23,11 @@ public:
         return posts;
     }
 
-    unsigned int insertPost(unsigned int, std::string);
+    unsigned int insertPost(unsigned int, const std::string &);
+
     unsigned int getNumberofPost();
+
+    std::string getPost(unsigned int postId);
 
     bool operator==(const topic &rhs) const {
         return _topic == rhs._topic &&
