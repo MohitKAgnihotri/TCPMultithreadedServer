@@ -11,10 +11,10 @@ int main()
 {
 
     message_board my_message_board;
-    my_message_board.InsertPost("test", "test");
-    my_message_board.GetNumberOfPost("test");
-    my_message_board.GetPost("test",0);
-    my_message_board.GetTopicId();
+    my_message_board.isTopicExist("test");
+    my_message_board.createNewTopic("test");
+    topic curr_topic = my_message_board.getTopic("test");
+
 
 	std::vector<std::string> requestList =
 	{

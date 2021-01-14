@@ -5,31 +5,24 @@
 #ifndef TCP_CLIENT_SERVER_MESSAGE_BOARD_H
 #define TCP_CLIENT_SERVER_MESSAGE_BOARD_H
 
-#include "post.h"
-#include <string>
-#include <vector>
-#include <map>
+#include "topic.h"
 
 class message_board {
-private:
-    static unsigned int post_ctr;
+    std::vector<topic> _message_board;
 public:
+        const std::vector<topic> &getMessageBoard() const {
+        return _message_board;
+    }
 
+    bool isTopicExist(std::string topic);
+    topic getTopic (std::string);
+    void createNewTopic(std::string);
 
-private:
-    std::map<std::string, std::vector<post>> _message_board;
-public:
+    bool operator==(const message_board &rhs) const;
 
-
-private:
-    bool isTopicExist(std::string);
-public:
-    std::vector <std::string> GetTopicId(void);
-    unsigned int InsertPost(std::string, std::string);
-    unsigned int GetNumberOfPost(std::string);
-    std::string GetPost(std::string, unsigned int);
-    const std::map<std::string, std::vector<post>> &getMessageBoard() const;
+    bool operator!=(const message_board &rhs) const;
 
 };
+
 
 #endif //TCP_CLIENT_SERVER_MESSAGE_BOARD_H
