@@ -8,15 +8,14 @@
 #include "topic.h"
 
 class message_board {
-    std::vector<topic> _message_board;
+    std::vector<topic *> _message_board;
 public:
-    const std::vector<topic> &getMessageBoard() const {
-        return _message_board;
-    }
+    const std::vector<topic *> &getMessageBoard() const;
 
+public:
     bool isTopicExist(std::string topic);
 
-    topic getTopic(std::string);
+    topic * getTopic(std::string);
 
     void createNewTopic(std::string);
 

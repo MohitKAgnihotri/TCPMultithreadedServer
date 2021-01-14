@@ -12,16 +12,15 @@
 class topic {
 private:
     std::string _topic;
-    std::vector<post> posts;
+    std::vector<post *> posts;
+public:
+    const std::vector<post *> &getPosts() const;
+
 public:
     topic(std::string topic) : _topic(std::move(topic)) {}
 
     const std::string &getTopic() const {
         return _topic;
-    }
-
-    const std::vector<post> &getPosts() const {
-        return posts;
     }
 
     unsigned int insertPost(unsigned int, const std::string &);
@@ -30,14 +29,9 @@ public:
 
     std::string getPost(unsigned int postId);
 
-    bool operator==(const topic &rhs) const {
-        return _topic == rhs._topic &&
-               posts == rhs.posts;
-    }
+    bool operator==(const topic &rhs) const;
 
-    bool operator!=(const topic &rhs) const {
-        return !(rhs == *this);
-    }
+    bool operator!=(const topic &rhs) const;
 };
 
 

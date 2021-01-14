@@ -88,14 +88,7 @@ void onClientDisconnected(const Client &client) {
     std::cout << "Client: " << client.getIp() << " disconnected: " << client.getInfoMessage() << std::endl;
 }
 
-void sig_exit(int s) {
-    std::cout << "Closing Server..." << std::endl;
-    exit(0);
-}
-
 int main() {
-    //register to SIGINT to close client when user press ctrl+c
-    signal(SIGUSR1, sig_exit);
 
     // start server on port 65123
     pipe_ret_t startRet = server.start(12345);
@@ -121,5 +114,6 @@ int main() {
         } else {
             std::cout << "Accepting client failed: " << client.getInfoMessage() << std::endl;
         }
+        sleep(1);
     }
 }

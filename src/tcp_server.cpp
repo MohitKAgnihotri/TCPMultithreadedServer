@@ -31,9 +31,10 @@ void TcpServer::receiveTask(/*TcpServer *context*/) {
     std::cout << "ThreadId" << std::this_thread::get_id();
 
     while(client->isConnected()) {
-        char msg[MAX_PACKET_SIZE] = {0u};
+        char msg[MAX_PACKET_SIZE];
+        memset(msg, 0x00, sizeof(char) * MAX_PACKET_SIZE);
         int numOfBytesReceived = recv(client->getFileDescriptor(), msg, MAX_PACKET_SIZE, 0);
-        if(numOfBytesReceived < 1) {
+        if (numOfBytesReceived < 1) {
             client->setDisconnected();
             if (numOfBytesReceived == 0) { //client closed connection
                 client->setErrorMessage("Client closed connection");

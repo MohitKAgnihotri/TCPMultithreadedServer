@@ -9,7 +9,7 @@ unsigned int topic::getNumberofPost() {
 }
 
 unsigned int topic::insertPost(unsigned int postId, const std::string &message) {
-    post npost(postId, message);
+    post *npost = new post(postId, message);
     //this->mutex_post.lock();
     this->posts.push_back(npost);
     //this->mutex_post.unlock();
@@ -20,5 +20,18 @@ std::string topic::getPost(unsigned int postId) {
     if (this->getNumberofPost() < postId)
         return "";
     else
-        return this->posts[postId].getMessage();
+        return this->posts[postId]->getMessage();
+}
+
+const std::vector<post *> &topic::getPosts() const {
+    return posts;
+}
+
+bool topic::operator==(const topic &rhs) const {
+    return _topic == rhs._topic &&
+           posts == rhs.posts;
+}
+
+bool topic::operator!=(const topic &rhs) const {
+    return !(rhs == *this);
 }
