@@ -31,7 +31,7 @@ void TcpServer::receiveTask(/*TcpServer *context*/) {
     std::cout << "ThreadId" << std::this_thread::get_id();
 
     while(client->isConnected()) {
-        char msg[MAX_PACKET_SIZE];
+        char msg[MAX_PACKET_SIZE] = {0u};
         int numOfBytesReceived = recv(client->getFileDescriptor(), msg, MAX_PACKET_SIZE, 0);
         if(numOfBytesReceived < 1) {
             client->setDisconnected();

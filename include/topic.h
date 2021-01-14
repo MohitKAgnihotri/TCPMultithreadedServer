@@ -6,10 +6,11 @@
 #define TCP_CLIENT_SERVER_TOPIC_H
 
 #include <utility>
-
+#include <mutex>
 #include "post.h"
 
 class topic {
+private:
     std::string _topic;
     std::vector<post> posts;
 public:

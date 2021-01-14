@@ -33,16 +33,37 @@ bool message_board::operator!=(const message_board &rhs) const {
     return !(rhs == *this);
 }
 
-unsigned int message_board::Post(std::string basicString, std::string basicString1) {
-    return 0;
+unsigned int message_board::Post(std::string usertopic, std::string message) {
+    unsigned int postId = 0;
+    if (this->isTopicExist(usertopic)) {
+        topic curr_topic = this->getTopic(usertopic);
+        postId = curr_topic.getPosts().size();
+        curr_topic.insertPost(postId, message);
+    } else {
+        this->createNewTopic(usertopic);
+        topic curr_topic = this->getTopic(usertopic);
+        postId = curr_topic.getPosts().size();
+        curr_topic.insertPost(postId, message);
+    }
+    return postId;
 }
 
-unsigned int message_board::Count(std::string basicString) {
-    return 0;
+unsigned int message_board::Count(std::string usertopic) {
+    if (this->isTopicExist(usertopic)) {
+        return this->getTopic(usertopic).getPosts().size();
+    } else {
+        return 0;
+    }
 }
 
 std::string message_board::List() {
-    return std::string();
+    std::string topic_list;
+    for (auto item:this->getMessageBoard()) {
+        topic_list.append(item.getTopic());
+        topic_list.append("#");
+    }
+    return topic_list;
+
 }
 
 std::string message_board::Read(std::string basicString, int i) {

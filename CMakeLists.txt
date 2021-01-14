@@ -14,3 +14,9 @@ add_executable(tcp_server
         src/RequestParser.cpp
         main.cpp
         src/message_board.cpp include/message_board.h src/topic.cpp include/topic.h src/post.cpp include/post.h)
+
+add_executable(tcp_client
+        src/tcp_client.cpp
+        src/client.cpp
+        client_example.cpp
+        )
