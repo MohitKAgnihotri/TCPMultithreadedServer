@@ -13,7 +13,7 @@
 
 #include "include/tcp_server.h"
 
-#define DEBUG 0
+//#define DEBUG 0
 
 // declare the server
 TcpServer server;
@@ -27,7 +27,7 @@ server_observer_t message_board_observer;
 
 // observer callback. will be called for every new message received by clients
 // with the requested IP address
-void process_incoming_message(const Client &client, const char *msg, size_t size) {
+void process_incoming_message(const Client *client, const char *msg, size_t size) {
     std::string msgStr = msg;
     // print the message content
     // if client sent the string "quit", close server
@@ -87,7 +87,7 @@ void process_incoming_message(const Client &client, const char *msg, size_t size
             if (post_message.length() != 0) {
                 pipe_ret_t ret = server.sendToClient(client, post_message.c_str(), post_message.length());
                 if (!ret.success) {
-                    std::cout << "failed to send message to the client" << ret.msg << client.getFileDescriptor()
+                    std::cout << "failed to send message to the client" << ret.msg << client->getFileDescriptor()
                               << std::endl;
                     server.sendToClient(client, post_message.c_str(), post_message.length());
                 }
@@ -95,7 +95,7 @@ void process_incoming_message(const Client &client, const char *msg, size_t size
                 post_message.append("maxpayne");
                 pipe_ret_t ret = server.sendToClient(client, post_message.c_str(), post_message.length());
                 if (!ret.success) {
-                    std::cout << "failed to send message to the client" << ret.msg << client.getFileDescriptor()
+                    std::cout << "failed to send message to the client" << ret.msg << client->getFileDescriptor()
                               << std::endl;
                     server.sendToClient(client, post_message.c_str(), post_message.length());
                 }
@@ -135,8 +135,8 @@ void process_incoming_message(const Client &client, const char *msg, size_t size
 }
 
 // observer callback. will be called when client disconnects
-void onClientDisconnected(const Client &client) {
-    std::cout << "Client: " << client.getIp() << " disconnected: " << client.getInfoMessage() << std::endl;
+void onClientDisconnected(const Client *client) {
+    std::cout << "Client: " << client->getIp() << " disconnected: " << client->getInfoMessage() << std::endl;
 }
 
 void signal_user1_handler(int signal) {
@@ -170,12 +170,13 @@ int main() {
 
     // receive clients
     while (1) {
-        Client client = server.acceptClient();
-        if (client.isConnected()) {
-            std::cout << "Got client with IP: " << client.getIp() << std::endl;
+
+        Client *client = server.acceptClient();
+        if (client->isConnected()) {
+            std::cout << "Got client with IP: " << client->getIp() << std::endl;
             server.printClients();
         } else {
-            std::cout << "Accepting client failed: " << client.getInfoMessage() << std::endl;
+            std::cout << "Accepting client failed: " << client->getInfoMessage() << std::endl;
         }
         sleep(1);
     }

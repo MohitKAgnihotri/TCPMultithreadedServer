@@ -15,24 +15,22 @@ void TcpServer::unsubscribeAll() {
 
 void TcpServer::printClients() {
     for (uint i=0; i<m_clients.size(); i++) {
-        std::string connected = m_clients[i].isConnected() ? "True" : "False";
+        std::string connected = m_clients[i]->isConnected() ? "True" : "False";
         std::cout << "-----------------\n" <<
-                  "IP address: " << m_clients[i].getIp() << std::endl <<
+                  "IP address: " << m_clients[i]->getIp() << std::endl <<
                   "Connected?: " << connected << std::endl <<
-                  "Socket FD: " << m_clients[i].getFileDescriptor() << std::endl <<
-                  "Message: " << m_clients[i].getInfoMessage().c_str() << std::endl;
+                  "Socket FD: " << m_clients[i]->getFileDescriptor() << std::endl <<
+                  "Message: " << m_clients[i]->getInfoMessage().c_str() << std::endl;
     }
 }
 
 /*
  * Receive client packets, and notify user
  */
-void TcpServer::receiveTask(/*TcpServer *context*/) {
+void TcpServer::receiveTask() {
 
-    Client * client = &m_clients.back();
-    std::cout << "ThreadId" << std::this_thread::get_id();
-
-    while(client->isConnected()) {
+    Client *client = m_clients.back();
+    while (client->isConnected()) {
         char msg[MAX_PACKET_SIZE];
         memset(msg, 0x00, sizeof(char) * MAX_PACKET_SIZE);
         int numOfBytesReceived = recv(client->getFileDescriptor(), msg, MAX_PACKET_SIZE, 0);
@@ -45,11 +43,11 @@ void TcpServer::receiveTask(/*TcpServer *context*/) {
                 client->setErrorMessage(strerror(errno));
             }
             close(client->getFileDescriptor());
-            publishClientDisconnected(*client);
-            deleteClient(*client);
+            publishClientDisconnected(client);
+            deleteClient(client);
             break;
         } else {
-            publishClientMsg(*client, msg, numOfBytesReceived);
+            publishClientMsg(client, msg, numOfBytesReceived);
         }
     }
 }
@@ -59,7 +57,7 @@ void TcpServer::receiveTask(/*TcpServer *context*/) {
  * If client isn't in the vector, return false. Return
  * true if it is.
  */
-bool TcpServer::deleteClient(Client & client) {
+bool TcpServer::deleteClient(Client *client) {
 #if 1
     mutex.lock();
     auto it = find(m_clients.cbegin(), m_clients.cend(), client);
@@ -91,9 +89,9 @@ bool TcpServer::deleteClient(Client & client) {
  * from clients with IP address identical to
  * the specific observer requested IP
  */
-void TcpServer::publishClientMsg(const Client & client, const char * msg, size_t msgSize) {
-    for (uint i=0; i<m_subscibers.size(); i++) {
-        if (m_subscibers[i].wantedIp == client.getIp() || m_subscibers[i].wantedIp.empty()) {
+void TcpServer::publishClientMsg(const Client *client, const char *msg, size_t msgSize) {
+    for (uint i = 0; i < m_subscibers.size(); i++) {
+        if (m_subscibers[i].wantedIp == client->getIp() || m_subscibers[i].wantedIp.empty()) {
             if (m_subscibers[i].incoming_packet_func != NULL) {
                 (*m_subscibers[i].incoming_packet_func)(client, msg, msgSize);
             }
@@ -107,9 +105,9 @@ void TcpServer::publishClientMsg(const Client & client, const char * msg, size_t
  * with IP address identical to the specific
  * observer requested IP
  */
-void TcpServer::publishClientDisconnected(const Client & client) {
-    for (uint i=0; i<m_subscibers.size(); i++) {
-        if (m_subscibers[i].wantedIp == client.getIp()) {
+void TcpServer::publishClientDisconnected(const Client *client) {
+    for (uint i = 0; i < m_subscibers.size(); i++) {
+        if (m_subscibers[i].wantedIp == client->getIp()) {
             if (m_subscibers[i].disconnected_func != NULL) {
                 (*m_subscibers[i].disconnected_func)(client);
             }
@@ -167,21 +165,21 @@ pipe_ret_t TcpServer::start(int port) {
  * mode (async) and will quit after timeout seconds if no client tried to connect.
  * Return accepted client
  */
-Client TcpServer::acceptClient(void) {
+Client *TcpServer::acceptClient(void) {
     socklen_t sosize = sizeof(m_clientAddress);
-    Client newClient;
+    Client *newClient = new Client;
 
     int file_descriptor = accept(m_sockfd, (struct sockaddr *) &m_clientAddress, &sosize);
     if (file_descriptor == -1) { // accept failed
-        newClient.setErrorMessage(strerror(errno));
+        newClient->setErrorMessage(strerror(errno));
         return newClient;
     }
 
-    newClient.setFileDescriptor(file_descriptor);
-    newClient.setConnected();
-    newClient.setIp(inet_ntoa(m_clientAddress.sin_addr));
+    newClient->setFileDescriptor(file_descriptor);
+    newClient->setConnected();
+    newClient->setIp(inet_ntoa(m_clientAddress.sin_addr));
     m_clients.push_back(newClient);
-    m_clients.back().setThreadHandler(std::bind(&TcpServer::receiveTask, this));
+    m_clients.back()->setThreadHandler(std::bind(&TcpServer::receiveTask, this));
     return newClient;
 }
 
@@ -205,15 +203,15 @@ pipe_ret_t TcpServer::sendToAllClients(const char * msg, size_t size) {
  * Send message to specific client (determined by client IP address).
  * Return true if message was sent successfully
  */
-pipe_ret_t TcpServer::sendToClient(const Client & client, const char * msg, size_t size){
+pipe_ret_t TcpServer::sendToClient(const Client *client, const char *msg, size_t size) {
     pipe_ret_t ret;
-    int numBytesSent = send(client.getFileDescriptor(), (char *)msg, size, 0);
+    int numBytesSent = send(client->getFileDescriptor(), (char *) msg, size, 0);
     if (numBytesSent < 0) { // send failed
         ret.success = false;
         ret.msg = strerror(errno);
         return ret;
     }
-    if ((uint)numBytesSent < size) { // not all bytes were sent
+    if ((uint) numBytesSent < size) { // not all bytes were sent
         ret.success = false;
         char msg[100];
         sprintf(msg, "Only %d bytes out of %lu was sent to client", numBytesSent, size);
@@ -231,8 +229,8 @@ pipe_ret_t TcpServer::sendToClient(const Client & client, const char * msg, size
 pipe_ret_t TcpServer::finish() {
     pipe_ret_t ret;
     for (uint i=0; i<m_clients.size(); i++) {
-        m_clients[i].setDisconnected();
-        if (close(m_clients[i].getFileDescriptor()) == -1) { // close failed
+        m_clients[i]->setDisconnected();
+        if (close(m_clients[i]->getFileDescriptor()) == -1) { // close failed
             ret.success = false;
             ret.msg = strerror(errno);
             return ret;

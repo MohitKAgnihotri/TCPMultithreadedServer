@@ -32,13 +32,13 @@ private:
     std::mutex mutex;
     struct sockaddr_in m_serverAddress;
     struct sockaddr_in m_clientAddress;
-    std::vector<Client> m_clients;
+    std::vector<Client *> m_clients;
     std::vector<server_observer_t> m_subscibers;
     std::thread *threadHandle;
 
-    void publishClientMsg(const Client &client, const char *msg, size_t msgSize);
+    void publishClientMsg(const Client *client, const char *msg, size_t msgSize);
 
-    void publishClientDisconnected(const Client &client);
+    void publishClientDisconnected(const Client *client);
 
     void receiveTask(/*void * context*/);
 
@@ -47,9 +47,9 @@ public:
 
     pipe_ret_t start(int port);
 
-    Client acceptClient(void);
+    Client *acceptClient(void);
 
-    bool deleteClient(Client &client);
+    bool deleteClient(Client *client);
 
     void subscribe(const server_observer_t &observer);
 
@@ -57,7 +57,7 @@ public:
 
     pipe_ret_t sendToAllClients(const char *msg, size_t size);
 
-    pipe_ret_t sendToClient(const Client &client, const char *msg, size_t size);
+    pipe_ret_t sendToClient(const Client *client, const char *msg, size_t size);
 
     pipe_ret_t finish();
 

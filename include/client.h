@@ -18,7 +18,6 @@ private:
 
 public:
     ~Client();
-
     Client() {
         m_sockfd = -1;
         m_ip = "";
@@ -28,7 +27,6 @@ public:
     }
 
     void setFileDescriptor(int sockfd) { m_sockfd = sockfd; }
-
     int getFileDescriptor() const { return m_sockfd; }
 
     void setIp(const std::string &ip) { m_ip = ip; }
