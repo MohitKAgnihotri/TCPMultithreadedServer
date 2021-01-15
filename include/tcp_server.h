@@ -17,6 +17,7 @@
 #include <cstring>
 #include <cerrno>
 #include <iostream>
+#include <mutex>
 #include "client.h"
 #include "server_observer.h"
 #include "pipe_ret_t.h"
@@ -28,6 +29,7 @@ class TcpServer {
 private:
 
     int m_sockfd;
+    std::mutex mutex;
     struct sockaddr_in m_serverAddress;
     struct sockaddr_in m_clientAddress;
     std::vector<Client> m_clients;

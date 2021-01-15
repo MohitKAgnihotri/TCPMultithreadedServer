@@ -18,7 +18,6 @@ private:
 
 public:
     ~Client();
-    bool operator ==(const Client & other);
 
     void setFileDescriptor(int sockfd) { m_sockfd = sockfd; }
     int getFileDescriptor() const { return m_sockfd; }
@@ -26,15 +25,21 @@ public:
     void setIp(const std::string & ip) { m_ip = ip; }
     std::string getIp() const { return m_ip; }
 
-    void setErrorMessage(const std::string & msg) { m_errorMsg = msg; }
+    void setErrorMessage(const std::string &msg) { m_errorMsg = msg; }
+
     std::string getInfoMessage() const { return m_errorMsg; }
 
     void setConnected() { m_isConnected = true; }
 
     void setDisconnected() { m_isConnected = false; }
+
     bool isConnected() { return m_isConnected; }
 
-    void setThreadHandler(std::function<void(void)> func) { m_threadHandler = new std::thread(func);}
+    void setThreadHandler(std::function<void(void)> func) { m_threadHandler = new std::thread(func); }
+
+    bool operator==(const Client &rhs) const;
+
+    bool operator!=(const Client &rhs) const;
 
 };
 

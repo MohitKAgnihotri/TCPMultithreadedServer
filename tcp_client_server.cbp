@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6"/>
+	<Project>
+		<Option title="tcp_client_server"/>
+		<Option makefile_is_custom="1"/>
+		<Option compiler="gcc"/>
+		<Option virtualFolders="CMake Files\;"/>
+		<Build>
+			<Target title="all">
+				<Option working_dir="/mnt/c/Workspace/Chegg/TCPMultithreadedServer"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -f &quot;/mnt/c/Workspace/Chegg/TCPMultithreadedServer/Makefile&quot;  VERBOSE=1 all"/>
+					<CompileFile command="/usr/bin/make -f &quot;/mnt/c/Workspace/Chegg/TCPMultithreadedServer/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -f &quot;/mnt/c/Workspace/Chegg/TCPMultithreadedServer/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -f &quot;/mnt/c/Workspace/Chegg/TCPMultithreadedServer/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="rebuild_cache">
+				<Option working_dir="/mnt/c/Workspace/Chegg/TCPMultithreadedServer"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -f &quot;/mnt/c/Workspace/Chegg/TCPMultithreadedServer/Makefile&quot;  VERBOSE=1 rebuild_cache"/>
+					<CompileFile command="/usr/bin/make -f &quot;/mnt/c/Workspace/Chegg/TCPMultithreadedServer/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -f &quot;/mnt/c/Workspace/Chegg/TCPMultithreadedServer/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -f &quot;/mnt/c/Workspace/Chegg/TCPMultithreadedServer/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="edit_cache">
+				<Option working_dir="/mnt/c/Workspace/Chegg/TCPMultithreadedServer"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -f &quot;/mnt/c/Workspace/Chegg/TCPMultithreadedServer/Makefile&quot;  VERBOSE=1 edit_cache"/>
+					<CompileFile command="/usr/bin/make -f &quot;/mnt/c/Workspace/Chegg/TCPMultithreadedServer/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -f &quot;/mnt/c/Workspace/Chegg/TCPMultithreadedServer/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -f &quot;/mnt/c/Workspace/Chegg/TCPMultithreadedServer/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="tcp_client">
+				<Option output="/mnt/c/Workspace/Chegg/TCPMultithreadedServer/tcp_client" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/mnt/c/Workspace/Chegg/TCPMultithreadedServer"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/mnt/c/Workspace/Chegg/TCPMultithreadedServer/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -f &quot;/mnt/c/Workspace/Chegg/TCPMultithreadedServer/Makefile&quot;  VERBOSE=1 tcp_client"/>
+					<CompileFile command="/usr/bin/make -f &quot;/mnt/c/Workspace/Chegg/TCPMultithreadedServer/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -f &quot;/mnt/c/Workspace/Chegg/TCPMultithreadedServer/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -f &quot;/mnt/c/Workspace/Chegg/TCPMultithreadedServer/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="tcp_client/fast">
+				<Option output="/mnt/c/Workspace/Chegg/TCPMultithreadedServer/tcp_client" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/mnt/c/Workspace/Chegg/TCPMultithreadedServer"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/mnt/c/Workspace/Chegg/TCPMultithreadedServer/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -f &quot;/mnt/c/Workspace/Chegg/TCPMultithreadedServer/Makefile&quot;  VERBOSE=1 tcp_client/fast"/>
+					<CompileFile command="/usr/bin/make -f &quot;/mnt/c/Workspace/Chegg/TCPMultithreadedServer/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -f &quot;/mnt/c/Workspace/Chegg/TCPMultithreadedServer/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -f &quot;/mnt/c/Workspace/Chegg/TCPMultithreadedServer/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="tcp_server">
+				<Option output="/mnt/c/Workspace/Chegg/TCPMultithreadedServer/tcp_server" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/mnt/c/Workspace/Chegg/TCPMultithreadedServer"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/mnt/c/Workspace/Chegg/TCPMultithreadedServer/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -f &quot;/mnt/c/Workspace/Chegg/TCPMultithreadedServer/Makefile&quot;  VERBOSE=1 tcp_server"/>
+					<CompileFile command="/usr/bin/make -f &quot;/mnt/c/Workspace/Chegg/TCPMultithreadedServer/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -f &quot;/mnt/c/Workspace/Chegg/TCPMultithreadedServer/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -f &quot;/mnt/c/Workspace/Chegg/TCPMultithreadedServer/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="tcp_server/fast">
+				<Option output="/mnt/c/Workspace/Chegg/TCPMultithreadedServer/tcp_server" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/mnt/c/Workspace/Chegg/TCPMultithreadedServer"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/mnt/c/Workspace/Chegg/TCPMultithreadedServer/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -f &quot;/mnt/c/Workspace/Chegg/TCPMultithreadedServer/Makefile&quot;  VERBOSE=1 tcp_server/fast"/>
+					<CompileFile command="/usr/bin/make -f &quot;/mnt/c/Workspace/Chegg/TCPMultithreadedServer/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -f &quot;/mnt/c/Workspace/Chegg/TCPMultithreadedServer/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -f &quot;/mnt/c/Workspace/Chegg/TCPMultithreadedServer/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+		</Build>
+		<Unit filename="/mnt/c/Workspace/Chegg/TCPMultithreadedServer/client_example.cpp">
+			<Option target="tcp_client"/>
+		</Unit>
+		<Unit filename="/mnt/c/Workspace/Chegg/TCPMultithreadedServer/include/message_board.h">
+			<Option target="tcp_server"/>
+		</Unit>
+		<Unit filename="/mnt/c/Workspace/Chegg/TCPMultithreadedServer/include/post.h">
+			<Option target="tcp_server"/>
+		</Unit>
+		<Unit filename="/mnt/c/Workspace/Chegg/TCPMultithreadedServer/include/topic.h">
+			<Option target="tcp_server"/>
+		</Unit>
+		<Unit filename="/mnt/c/Workspace/Chegg/TCPMultithreadedServer/main.cpp">
+			<Option target="tcp_server"/>
+		</Unit>
+		<Unit filename="/mnt/c/Workspace/Chegg/TCPMultithreadedServer/src/RequestParser.cpp">
+			<Option target="tcp_server"/>
+		</Unit>
+		<Unit filename="/mnt/c/Workspace/Chegg/TCPMultithreadedServer/src/client.cpp">
+			<Option target="tcp_client"/>
+			<Option target="tcp_server"/>
+		</Unit>
+		<Unit filename="/mnt/c/Workspace/Chegg/TCPMultithreadedServer/src/message_board.cpp">
+			<Option target="tcp_server"/>
+		</Unit>
+		<Unit filename="/mnt/c/Workspace/Chegg/TCPMultithreadedServer/src/post.cpp">
+			<Option target="tcp_server"/>
+		</Unit>
+		<Unit filename="/mnt/c/Workspace/Chegg/TCPMultithreadedServer/src/tcp_client.cpp">
+			<Option target="tcp_client"/>
+		</Unit>
+		<Unit filename="/mnt/c/Workspace/Chegg/TCPMultithreadedServer/src/tcp_server.cpp">
+			<Option target="tcp_server"/>
+		</Unit>
+		<Unit filename="/mnt/c/Workspace/Chegg/TCPMultithreadedServer/src/topic.cpp">
+			<Option target="tcp_server"/>
+		</Unit>
+		<Unit filename="/mnt/c/Workspace/Chegg/TCPMultithreadedServer/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\"/>
+		</Unit>
+	</Project>
+</CodeBlocks_project_file>

@@ -11,10 +11,12 @@ Client::~Client() {
     }
 }
 
-bool Client::operator ==(const Client & other) {
-    if ( (this->m_sockfd == other.m_sockfd) &&
-         (this->m_ip == other.m_ip) ) {
-        return true;
-    }
-    return false;
+bool Client::operator==(const Client &rhs) const {
+    return m_sockfd == rhs.m_sockfd &&
+           m_ip == rhs.m_ip;
 }
+
+bool Client::operator!=(const Client &rhs) const {
+    return !(rhs == *this);
+}
+

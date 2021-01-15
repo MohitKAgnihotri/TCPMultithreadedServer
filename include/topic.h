@@ -13,6 +13,7 @@ class topic {
 private:
     std::string _topic;
     std::vector<post *> posts;
+    std::mutex mutex;
 public:
     const std::vector<post *> &getPosts() const;
 

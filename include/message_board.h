@@ -9,6 +9,7 @@
 
 class message_board {
     std::vector<topic *> _message_board;
+    std::mutex mutex;
 public:
     const std::vector<topic *> &getMessageBoard() const;
 
@@ -29,7 +30,7 @@ public:
 
     unsigned int Count(std::string basicString);
 
-    std::string Read(std::string basicString, int i);
+    std::string Read(std::string basicString, unsigned int i);
 };
 
 

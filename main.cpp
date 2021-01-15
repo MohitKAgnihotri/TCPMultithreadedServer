@@ -8,10 +8,12 @@
 #include "message_board.h"
 
 #include <iostream>
-#include <signal.h>
+#include <csignal>
 #include <string>
 
 #include "include/tcp_server.h"
+
+#define DEBUG
 
 // declare the server
 TcpServer server;
@@ -32,47 +34,84 @@ void process_incoming_message(const Client &client, const char *msg, size_t size
     // else if client sent "print" print the server clients
     // else just print the client message
     if (msgStr.find("POST") != std::string::npos) {
+#ifdef DEBUG
         std::cout << "Post Request Received" << std::endl;
+#endif
         PostRequest post = PostRequest::parse(msgStr);
         if (post.valid) {
+#ifdef DEBUG
             std::cout << "Post request: " << post.toString() << std::endl;
             std::cout << "Post topic: " << post.getTopicId() << std::endl;
             std::cout << "Post message: " << post.getMessage() << std::endl;
+#endif
             unsigned int postId = my_message_board.Post(post.getTopicId(), post.getMessage());
-            server.sendToClient(client, std::to_string(postId).c_str(), 1);
+            server.sendToClient(client, std::to_string(postId).c_str(), std::to_string(postId).length());
         }
     } else if (msgStr.find("LIST") != std::string::npos) {
+#ifdef DEBUG
         std::cout << "List Request Received" << std::endl;
+#endif
         ListRequest list = ListRequest::parse(msgStr);
         if (list.valid) {
+#ifdef DEBUG
             std::cout << "List request: " << list.toString() << std::endl;
+#endif
             std::string topic_string = my_message_board.List();
             server.sendToClient(client, topic_string.c_str(), topic_string.length());
         }
     } else if (msgStr.find("COUNT") != std::string::npos) {
+#ifdef DEBUG
         std::cout << "COUNT Request Received" << std::endl;
+#endif
         CountRequest count = CountRequest::parse(msgStr);
         if (count.valid) {
+#ifdef DEBUG
             std::cout << "Count request: " << count.toString() << std::endl;
             std::cout << "Count topic: " << count.getTopicId() << std::endl;
+#endif
             unsigned int num_of_post = my_message_board.Count(count.getTopicId());
-            server.sendToClient(client, std::to_string(num_of_post).c_str(), 1);
+            server.sendToClient(client, std::to_string(num_of_post).c_str(), std::to_string(num_of_post).length());
         }
     } else if (msgStr.find("READ") != std::string::npos) {
+#ifdef DEBUG
         std::cout << "READ Request Received" << std::endl;
+#endif
         ReadRequest read = ReadRequest::parse(msgStr);
         if (read.valid) {
+#ifdef DEBUG
             std::cout << "Read request" << read.toString() << std::endl;
             std::cout << "Read topic: " << read.getTopicId() << std::endl;
             std::cout << "Read post id: " << read.getPostId() << std::endl;
+#endif
             std::string post_message = my_message_board.Read(read.getTopicId(), read.getPostId());
-            server.sendToClient(client, post_message.c_str(), post_message.length());
+            if (post_message.length() != 0) {
+                pipe_ret_t ret = server.sendToClient(client, post_message.c_str(), post_message.length());
+                if (!ret.success) {
+                    std::cout << "failed to send message to the client" << std::endl;
+                }
+            } else {
+                post_message.append("maxpayne");
+                pipe_ret_t ret = server.sendToClient(client, post_message.c_str(), post_message.length());
+                if (!ret.success) {
+                    std::cout << "failed to send message to the client" << std::endl;
+                }
+            }
         }
     } else if (msgStr.find("EXIT") != std::string::npos) {
-        std::cout << "Exit Request Received" << std::endl;
+#ifdef DEBUG
+        std::cout << "EXIT Request Received" << std::endl;
+#endif
         ExitRequest exitReq = ExitRequest::parse(msgStr);
         if (exitReq.valid) {
+#ifdef DEBUG
             std::cout << "Exit request: " << exitReq.toString() << std::endl;
+#endif
+            for (auto item_topic:my_message_board.getMessageBoard()) {
+                for (auto item : item_topic->getPosts()) {
+                    free(item);
+                }
+                free(item_topic);
+            }
             pipe_ret_t ret = server.finish();
             if (ret.success) {
                 kill(getppid(), SIGUSR1);
@@ -86,6 +125,18 @@ void process_incoming_message(const Client &client, const char *msg, size_t size
 // observer callback. will be called when client disconnects
 void onClientDisconnected(const Client &client) {
     std::cout << "Client: " << client.getIp() << " disconnected: " << client.getInfoMessage() << std::endl;
+}
+
+void signal_user1_handler(int signal) {
+    std::cout << "Handling User Signal 1" << std::endl;
+    for (auto item_topic:my_message_board.getMessageBoard()) {
+        for (auto item : item_topic->getPosts()) {
+            free(item);
+        }
+        free(item_topic);
+    }
+
+    exit(0);
 }
 
 int main() {

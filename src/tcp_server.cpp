@@ -1,5 +1,7 @@
 
+#include <algorithm>
 #include "../include/tcp_server.h"
+
 
 
 void TcpServer::subscribe(const server_observer_t & observer) {
@@ -58,6 +60,16 @@ void TcpServer::receiveTask(/*TcpServer *context*/) {
  * true if it is.
  */
 bool TcpServer::deleteClient(Client & client) {
+#if 1
+    mutex.lock();
+    auto it = find(m_clients.cbegin(), m_clients.cend(), client);
+    if (it != m_clients.cend()) {
+        m_clients.erase(it);
+        return true;
+    }
+    mutex.unlock();
+    return false;
+#else
     int clientIndex = -1;
     for (uint i=0; i<m_clients.size(); i++) {
         if (m_clients[i] == client) {
@@ -70,6 +82,7 @@ bool TcpServer::deleteClient(Client & client) {
         return true;
     }
     return false;
+#endif
 }
 
 /*

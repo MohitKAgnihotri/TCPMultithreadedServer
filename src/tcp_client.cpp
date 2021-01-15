@@ -104,6 +104,7 @@ void TcpClient::ReceiveTask() {
 
     while(!stop) {
         char msg[MAX_PACKET_SIZE];
+        memset(msg, 0x00, sizeof(char) * MAX_PACKET_SIZE);
         int numOfBytesReceived = recv(m_sockfd, msg, MAX_PACKET_SIZE, 0);
         if(numOfBytesReceived < 1) {
             pipe_ret_t ret;

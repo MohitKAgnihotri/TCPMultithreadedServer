@@ -39,6 +39,7 @@ bool message_board::operator!=(const message_board &rhs) const {
 
 unsigned int message_board::Post(std::string usertopic, std::string message) {
     unsigned int postId = 0;
+    mutex.lock();
     if (this->isTopicExist(usertopic)) {
         topic *curr_topic = this->getTopic(usertopic);
         postId = curr_topic->getPosts().size();
@@ -49,6 +50,7 @@ unsigned int message_board::Post(std::string usertopic, std::string message) {
         postId = curr_topic->getPosts().size();
         curr_topic->insertPost(postId, message);
     }
+    mutex.unlock();
     return postId;
 }
 
@@ -70,8 +72,15 @@ std::string message_board::List() {
 
 }
 
-std::string message_board::Read(std::string basicString, int i) {
-    return std::string();
+std::string message_board::Read(std::string userTopic, unsigned int i) {
+    std::string post("          ");
+    if (this->isTopicExist(userTopic)) {
+        topic *curr_topic = this->getTopic(userTopic);
+        if (curr_topic->getPosts().size() > i) {
+            post = curr_topic->getPosts()[i]->getMessage();
+        }
+    }
+    return post;
 }
 
 const std::vector<topic *> &message_board::getMessageBoard() const {

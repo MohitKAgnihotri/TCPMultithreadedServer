@@ -10,9 +10,9 @@ unsigned int topic::getNumberofPost() {
 
 unsigned int topic::insertPost(unsigned int postId, const std::string &message) {
     post *npost = new post(postId, message);
-    //this->mutex_post.lock();
+    mutex.lock();
     this->posts.push_back(npost);
-    //this->mutex_post.unlock();
+    mutex.unlock();
     return 0;
 }
 
