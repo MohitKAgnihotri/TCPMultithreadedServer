@@ -14,15 +14,25 @@ private:
     std::string m_ip = "";
     std::string m_errorMsg = "";
     bool m_isConnected;
-    std::thread * m_threadHandler = nullptr;
+    std::thread *m_threadHandler = nullptr;
 
 public:
     ~Client();
 
+    Client() {
+        m_sockfd = -1;
+        m_ip = "";
+        m_errorMsg = "";
+        m_isConnected = false;
+        m_threadHandler = nullptr;
+    }
+
     void setFileDescriptor(int sockfd) { m_sockfd = sockfd; }
+
     int getFileDescriptor() const { return m_sockfd; }
 
-    void setIp(const std::string & ip) { m_ip = ip; }
+    void setIp(const std::string &ip) { m_ip = ip; }
+
     std::string getIp() const { return m_ip; }
 
     void setErrorMessage(const std::string &msg) { m_errorMsg = msg; }
