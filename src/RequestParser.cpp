@@ -11,20 +11,23 @@ PostRequest::~PostRequest()
 PostRequest PostRequest::parse(std::string request)
 {
 	std::regex postRegex("^POST(@[^@#]*)#(.+)$");
-	std::smatch postMatch;
-	PostRequest post;
+    std::smatch postMatch;
+    PostRequest post;
 
-	if (!std::regex_match(request, postMatch, postRegex, std::regex_constants::match_default))
-	{
-		post.valid = 0;
-		return post;
-	}
+    if (!std::regex_match(request, postMatch, postRegex, std::regex_constants::match_default)) {
+        post.valid = 0;
+        return post;
+    }
 
-	post.topicId = postMatch[1];
-	post.message = postMatch[2];
-	post.valid = 1;
+    post.topicId = postMatch[1];
+    if (post.topicId.length() >= 140)
+        post.topicId.resize(140);
+    post.message = postMatch[2];
+    if (post.message.length() >= 140)
+        post.message.resize(140);
+    post.valid = 1;
 
-	return post;
+    return post;
 }
 
 std::string PostRequest::getTopicId()
@@ -51,20 +54,21 @@ ReadRequest::~ReadRequest()
 ReadRequest ReadRequest::parse(std::string request)
 {
 	std::regex readRegex("^READ(@[^@#]*)#([0-9]+)$");
-	std::smatch readMatch;
-	ReadRequest read;
+    std::smatch readMatch;
+    ReadRequest read;
 
-	if (!std::regex_match(request, readMatch, readRegex, std::regex_constants::match_default))
-	{
-		read.valid = 0;
-		return read;
-	}
+    if (!std::regex_match(request, readMatch, readRegex, std::regex_constants::match_default)) {
+        read.valid = 0;
+        return read;
+    }
 
-	read.topicId = readMatch[1];
-	read.postId = std::stoi(readMatch[2]);
-	read.valid = 1;
+    read.topicId = readMatch[1];
+    if (read.topicId.length() >= 140)
+        read.topicId.resize(140);
+    read.postId = std::stoi(readMatch[2]);
+    read.valid = 1;
 
-	return read;
+    return read;
 }
 
 std::string ReadRequest::getTopicId()
@@ -91,19 +95,20 @@ CountRequest::~CountRequest()
 CountRequest CountRequest::parse(std::string request)
 {
 	std::regex countRegex("^COUNT(@[^@#]*)$");
-	std::smatch countMatch;
-	CountRequest count;
+    std::smatch countMatch;
+    CountRequest count;
 
-	if (!std::regex_match(request, countMatch, countRegex, std::regex_constants::match_default))
-	{
-		count.valid = 0;
-		return count;
-	}
+    if (!std::regex_match(request, countMatch, countRegex, std::regex_constants::match_default)) {
+        count.valid = 0;
+        return count;
+    }
 
-	count.topicId = countMatch[1];
-	count.valid = 1;
+    count.topicId = countMatch[1];
+    if (count.topicId.length() >= 140)
+        count.topicId.resize(140);
+    count.valid = 1;
 
-	return count;
+    return count;
 }
 
 std::string CountRequest::getTopicId()

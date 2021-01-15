@@ -13,7 +13,7 @@
 
 #include "include/tcp_server.h"
 
-#define DEBUG
+#define DEBUG 0
 
 // declare the server
 TcpServer server;
@@ -87,13 +87,17 @@ void process_incoming_message(const Client &client, const char *msg, size_t size
             if (post_message.length() != 0) {
                 pipe_ret_t ret = server.sendToClient(client, post_message.c_str(), post_message.length());
                 if (!ret.success) {
-                    std::cout << "failed to send message to the client" << std::endl;
+                    std::cout << "failed to send message to the client" << ret.msg << client.getFileDescriptor()
+                              << std::endl;
+                    server.sendToClient(client, post_message.c_str(), post_message.length());
                 }
             } else {
                 post_message.append("maxpayne");
                 pipe_ret_t ret = server.sendToClient(client, post_message.c_str(), post_message.length());
                 if (!ret.success) {
-                    std::cout << "failed to send message to the client" << std::endl;
+                    std::cout << "failed to send message to the client" << ret.msg << client.getFileDescriptor()
+                              << std::endl;
+                    server.sendToClient(client, post_message.c_str(), post_message.length());
                 }
             }
         }
@@ -106,19 +110,27 @@ void process_incoming_message(const Client &client, const char *msg, size_t size
 #ifdef DEBUG
             std::cout << "Exit request: " << exitReq.toString() << std::endl;
 #endif
-            for (auto item_topic:my_message_board.getMessageBoard()) {
-                for (auto item : item_topic->getPosts()) {
+#if 0
+            for (auto item_topic:my_message_board.getMessageBoard())
+            {
+                for (auto item : item_topic->getPosts())
+                {
                     free(item);
                 }
                 free(item_topic);
             }
             pipe_ret_t ret = server.finish();
-            if (ret.success) {
-                kill(getppid(), SIGUSR1);
+            if (ret.success)
+            {
+                server.sendToClient(client,msgStr.c_str(), msgStr.length());
+                kill(getppid(), SIGEV_SIGNAL);
             }
+#endif
+            server.sendToClient(client, msgStr.c_str(), msgStr.length());
         }
     } else {
         std::cout << "Invalid Request" << msgStr << std::endl;
+        server.sendToClient(client, msgStr.c_str(), msgStr.length());
     }
 }
 
