@@ -1,5 +1,6 @@
 
 #include <algorithm>
+#include <thread>
 #include "../include/tcp_server.h"
 
 
@@ -30,6 +31,12 @@ void TcpServer::printClients() {
 void TcpServer::receiveTask() {
 
     Client *client = m_clients.back();
+
+    std::cout << "-----------------------------------------------------------------" << std::endl;
+    std::cout << __func__ << "Thread id = " << std::this_thread::get_id() << std::endl;
+    std::cout << __func__ << "Client fd = " << client->getFileDescriptor() << std::endl;
+    std::cout << "-----------------------------------------------------------------" << std::endl;
+
     while (client->isConnected()) {
         char msg[MAX_PACKET_SIZE];
         memset(msg, 0x00, sizeof(char) * MAX_PACKET_SIZE);

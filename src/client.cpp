@@ -19,4 +19,3 @@ bool Client::operator==(const Client &rhs) const {
 bool Client::operator!=(const Client &rhs) const {
     return !(rhs == *this);
 }
-
