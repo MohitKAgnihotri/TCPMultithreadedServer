@@ -174,7 +174,6 @@ int main() {
 
     // receive clients
     while (1) {
-
         Client *client = server.acceptClient();
         if (client->isConnected()) {
             std::cout << "Got client with IP: " << client->getIp() << std::endl;
@@ -182,6 +181,5 @@ int main() {
         } else {
             std::cout << "Accepting client failed: " << client->getInfoMessage() << std::endl;
         }
-        sleep(1);
     }
 }
