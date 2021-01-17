@@ -3,7 +3,7 @@
 #include <thread>
 #include "../include/tcp_server.h"
 
-
+std::mutex TcpServer::mutex_server;
 
 void TcpServer::subscribe(const server_observer_t & observer) {
     m_subscibers.push_back(observer);
@@ -15,6 +15,7 @@ void TcpServer::unsubscribeAll() {
 
 
 void TcpServer::printClients() {
+#if 0
     for (uint i=0; i<m_clients.size(); i++) {
         std::string connected = m_clients[i]->isConnected() ? "True" : "False";
         std::cout << "-----------------\n" <<
@@ -23,6 +24,7 @@ void TcpServer::printClients() {
                   "Socket FD: " << m_clients[i]->getFileDescriptor() << std::endl <<
                   "Message: " << m_clients[i]->getInfoMessage().c_str() << std::endl;
     }
+#endif
 }
 
 /*
@@ -30,28 +32,33 @@ void TcpServer::printClients() {
  */
 void TcpServer::receiveTask() {
 
+    TcpServer::mutex_server.lock();
     Client *client = m_clients.back();
+    TcpServer::mutex_server.unlock();
 
+#if 0
     std::cout << "-----------------------------------------------------------------" << std::endl;
     std::cout << __func__ << "Thread id = " << std::this_thread::get_id() << std::endl;
     std::cout << __func__ << "Client fd = " << client->getFileDescriptor() << std::endl;
     std::cout << "-----------------------------------------------------------------" << std::endl;
+#endif
 
-    while (client->isConnected()) {
+    while (client->isConnected())
+    {
         char msg[MAX_PACKET_SIZE];
         memset(msg, 0x00, sizeof(char) * MAX_PACKET_SIZE);
         int numOfBytesReceived = recv(client->getFileDescriptor(), msg, MAX_PACKET_SIZE, 0);
-        if (numOfBytesReceived < 1) {
+        if (numOfBytesReceived < 1)
+        {
             client->setDisconnected();
             if (numOfBytesReceived == 0) { //client closed connection
                 client->setErrorMessage("Client closed connection");
-                //printf("client closed");
             } else {
                 client->setErrorMessage(strerror(errno));
             }
             close(client->getFileDescriptor());
             publishClientDisconnected(client);
-            deleteClient(client);
+            //deleteClient(client);
             break;
         } else {
             publishClientMsg(client, msg, numOfBytesReceived);
@@ -64,30 +71,16 @@ void TcpServer::receiveTask() {
  * If client isn't in the vector, return false. Return
  * true if it is.
  */
-bool TcpServer::deleteClient(Client *client) {
-#if 1
-    mutex.lock();
+bool TcpServer::deleteClient(Client *client)
+{
+    const std::lock_guard<std::mutex> lock(TcpServer::mutex_server);
+    //TcpServer::mutex_server.lock();
     auto it = find(m_clients.cbegin(), m_clients.cend(), client);
     if (it != m_clients.cend()) {
         m_clients.erase(it);
         return true;
     }
-    mutex.unlock();
     return false;
-#else
-    int clientIndex = -1;
-    for (uint i=0; i<m_clients.size(); i++) {
-        if (m_clients[i] == client) {
-            clientIndex = i;
-            break;
-        }
-    }
-    if (clientIndex > -1) {
-        m_clients.erase(m_clients.begin() + clientIndex);
-        return true;
-    }
-    return false;
-#endif
 }
 
 /*
@@ -185,8 +178,11 @@ Client *TcpServer::acceptClient(void) {
     newClient->setFileDescriptor(file_descriptor);
     newClient->setConnected();
     newClient->setIp(inet_ntoa(m_clientAddress.sin_addr));
+
+    TcpServer::mutex_server.lock();
+    newClient->setThreadHandler(std::bind(&TcpServer::receiveTask, this));
     m_clients.push_back(newClient);
-    m_clients.back()->setThreadHandler(std::bind(&TcpServer::receiveTask, this));
+    TcpServer::mutex_server.unlock();
     return newClient;
 }
 
@@ -234,8 +230,11 @@ pipe_ret_t TcpServer::sendToClient(const Client *client, const char *msg, size_t
  * Return true is success, false otherwise
  */
 pipe_ret_t TcpServer::finish() {
+
+    const std::lock_guard<std::mutex> lock(TcpServer::mutex_server);
     pipe_ret_t ret;
-    for (uint i=0; i<m_clients.size(); i++) {
+    for (uint i=0; i<m_clients.size(); i++)
+    {
         m_clients[i]->setDisconnected();
         if (close(m_clients[i]->getFileDescriptor()) == -1) { // close failed
             ret.success = false;

@@ -9,7 +9,7 @@
 
 class message_board {
     std::vector<topic *> _message_board;
-    std::mutex mutex;
+    static std::mutex mutex_msgboard;
 public:
     const std::vector<topic *> &getMessageBoard() const;
 

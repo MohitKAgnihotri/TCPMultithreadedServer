@@ -36,6 +36,7 @@
 *.x86_64
 *.hex
 
+
 # Debug files
 *.dSYM/
 *.su
@@ -51,3 +52,4 @@ Module.symvers
 Mkfile.old
 dkms.conf
 /cmake-build-debug/
+/.idea/deployment.xml

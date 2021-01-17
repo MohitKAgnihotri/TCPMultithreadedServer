@@ -84,20 +84,24 @@ void process_incoming_message(const Client *client, const char *msg, size_t size
             std::cout << "Read post id: " << read.getPostId() << std::endl;
 #endif
             std::string post_message = my_message_board.Read(read.getTopicId(), read.getPostId());
-            if (post_message.length() != 0) {
+            if (post_message.length() != 0)
+            {
                 pipe_ret_t ret = server.sendToClient(client, post_message.c_str(), post_message.length());
-                if (!ret.success) {
+                if (!ret.success)
+                {
                     std::cout << "failed to send message to the client" << ret.msg << client->getFileDescriptor()
                               << std::endl;
                     server.sendToClient(client, post_message.c_str(), post_message.length());
                 }
-            } else {
-                post_message.append("maxpayne");
-                pipe_ret_t ret = server.sendToClient(client, post_message.c_str(), post_message.length());
+            }
+            else
+            {
+                std::string failed_response("No such post found");
+                pipe_ret_t ret = server.sendToClient(client, failed_response.c_str(), failed_response.length());
                 if (!ret.success) {
                     std::cout << "failed to send message to the client" << ret.msg << client->getFileDescriptor()
                               << std::endl;
-                    server.sendToClient(client, post_message.c_str(), post_message.length());
+                    server.sendToClient(client, failed_response.c_str(), failed_response.length());
                 }
             }
         }

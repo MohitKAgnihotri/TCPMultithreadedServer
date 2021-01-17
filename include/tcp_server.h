@@ -27,9 +27,8 @@
 
 class TcpServer {
 private:
-
     int m_sockfd;
-    std::mutex mutex;
+    static std::mutex mutex_server;
     struct sockaddr_in m_serverAddress;
     struct sockaddr_in m_clientAddress;
     std::vector<Client *> m_clients;
@@ -63,7 +62,5 @@ public:
 
     void printClients();
 };
-
-
 
 #endif //INTERCOM_TCP_SERVER_H

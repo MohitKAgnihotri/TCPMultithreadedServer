@@ -2,9 +2,12 @@
 #define __REQUESTPARSER_H
 
 #include <string>
+#include <mutex>
 
 class PostRequest
 {
+private:
+    static std::mutex mutex_post_request;
 public:
 	PostRequest();
 	~PostRequest();
@@ -20,6 +23,8 @@ public:
 
 class ReadRequest
 {
+private:
+    static std::mutex mutex_read_request;
 public:
 	ReadRequest();
 	~ReadRequest();
@@ -35,6 +40,8 @@ public:
 
 class CountRequest
 {
+private:
+    static std::mutex mutex_count_request;
 public:
 	CountRequest();
 	~CountRequest();
@@ -48,6 +55,8 @@ public:
 
 class ListRequest
 {
+private:
+    static std::mutex mutex_list_request;
 public:
 	ListRequest();
 	~ListRequest();
@@ -58,6 +67,8 @@ public:
 
 class ExitRequest
 {
+private:
+    static std::mutex mutex_exit_request;
 public:
 	ExitRequest();
 	~ExitRequest();

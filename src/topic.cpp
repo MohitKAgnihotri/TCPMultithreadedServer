@@ -4,15 +4,18 @@
 
 #include "topic.h"
 
+std::mutex topic::mutex_post;
+
 unsigned int topic::getNumberofPost() {
     return this->posts.size();
 }
 
 unsigned int topic::insertPost(unsigned int postId, const std::string &message) {
     post *npost = new post(postId, message);
-    mutex.lock();
+    const std::lock_guard<std::mutex> lock(topic::mutex_post);
+    //topic::mutex_post.lock();
     this->posts.push_back(npost);
-    mutex.unlock();
+    //topic::mutex_post.unlock();
     return 0;
 }
 

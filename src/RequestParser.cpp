@@ -2,6 +2,12 @@
 
 #include "RequestParser.h"
 
+std::mutex PostRequest::mutex_post_request;
+std::mutex ReadRequest::mutex_read_request;
+std::mutex CountRequest::mutex_count_request;
+std::mutex ListRequest::mutex_list_request;
+std::mutex ExitRequest::mutex_exit_request;
+
 PostRequest::PostRequest() : valid(0)
 { }
 
@@ -10,6 +16,7 @@ PostRequest::~PostRequest()
 
 PostRequest PostRequest::parse(std::string request)
 {
+    const std::lock_guard<std::mutex> lock(PostRequest::mutex_post_request);
 	std::regex postRegex("^POST(@[^@#]*)#(.+)$");
     std::smatch postMatch;
     PostRequest post;
@@ -42,6 +49,7 @@ std::string PostRequest::getMessage()
 
 std::string PostRequest::toString()
 {
+    const std::lock_guard<std::mutex> lock(PostRequest::mutex_post_request);
 	return std::string("POST") + topicId + std::string("#") + message;
 }
 
@@ -53,6 +61,7 @@ ReadRequest::~ReadRequest()
 
 ReadRequest ReadRequest::parse(std::string request)
 {
+    const std::lock_guard<std::mutex> lock(ReadRequest::mutex_read_request);
 	std::regex readRegex("^READ(@[^@#]*)#([0-9]+)$");
     std::smatch readMatch;
     ReadRequest read;
@@ -83,6 +92,7 @@ int ReadRequest::getPostId()
 
 std::string ReadRequest::toString()
 {
+    const std::lock_guard<std::mutex> lock(ReadRequest::mutex_read_request);
 	return std::string("READ") + topicId + std::string("#") + std::to_string(postId);
 }
 
@@ -94,6 +104,7 @@ CountRequest::~CountRequest()
 
 CountRequest CountRequest::parse(std::string request)
 {
+    const std::lock_guard<std::mutex> lock(CountRequest::mutex_count_request);
 	std::regex countRegex("^COUNT(@[^@#]*)$");
     std::smatch countMatch;
     CountRequest count;
@@ -118,6 +129,7 @@ std::string CountRequest::getTopicId()
 
 std::string CountRequest::toString()
 {
+    const std::lock_guard<std::mutex> lock(CountRequest::mutex_count_request);
 	return std::string("COUNT") + topicId;
 }
 
@@ -129,6 +141,7 @@ ListRequest::~ListRequest()
 
 ListRequest ListRequest::parse(std::string request)
 {
+    const std::lock_guard<std::mutex> lock(ListRequest::mutex_list_request);
 	std::regex listRegex("^LIST$");
 	std::smatch listMatch;
 	ListRequest list;
@@ -146,6 +159,7 @@ ListRequest ListRequest::parse(std::string request)
 
 std::string ListRequest::toString()
 {
+    const std::lock_guard<std::mutex> lock(ListRequest::mutex_list_request);
 	return std::string("LIST");
 }
 
@@ -157,6 +171,7 @@ ExitRequest::~ExitRequest()
 
 ExitRequest ExitRequest::parse(std::string request)
 {
+    const std::lock_guard<std::mutex> lock(ExitRequest::mutex_exit_request);
 	std::regex exitRegex("^EXIT$");
 	std::smatch exitMatch;
 	ExitRequest exitReq;
@@ -174,5 +189,6 @@ ExitRequest ExitRequest::parse(std::string request)
 
 std::string ExitRequest::toString()
 {
+    const std::lock_guard<std::mutex> lock(ExitRequest::mutex_exit_request);
 	return std::string("EXIT");
 }

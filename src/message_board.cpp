@@ -6,6 +6,8 @@
 #include "topic.h"
 #include "message_board.h"
 
+std::mutex message_board::mutex_msgboard;
+
 bool message_board::isTopicExist(std::string topic) {
     for (auto item: this->getMessageBoard()) {
         if (item->getTopic() == topic) {
@@ -39,7 +41,8 @@ bool message_board::operator!=(const message_board &rhs) const {
 
 unsigned int message_board::Post(std::string usertopic, std::string message) {
     unsigned int postId = 0;
-    mutex.lock();
+    const std::lock_guard<std::mutex> lock(message_board::mutex_msgboard);
+    //message_board::mutex_msgboard.lock();
     if (this->isTopicExist(usertopic)) {
         topic *curr_topic = this->getTopic(usertopic);
         postId = curr_topic->getPosts().size();
@@ -50,7 +53,7 @@ unsigned int message_board::Post(std::string usertopic, std::string message) {
         postId = curr_topic->getPosts().size();
         curr_topic->insertPost(postId, message);
     }
-    mutex.unlock();
+    //message_board::mutex_msgboard.unlock();
     return postId;
 }
 
@@ -73,7 +76,7 @@ std::string message_board::List() {
 }
 
 std::string message_board::Read(std::string userTopic, unsigned int i) {
-    std::string post("          ");
+    std::string post("");
     if (this->isTopicExist(userTopic)) {
         topic *curr_topic = this->getTopic(userTopic);
         if (curr_topic->getPosts().size() > i) {

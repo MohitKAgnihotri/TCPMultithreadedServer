@@ -13,7 +13,12 @@ class topic {
 private:
     std::string _topic;
     std::vector<post *> posts;
-    std::mutex mutex;
+    static std::mutex mutex_post;
+public:
+    static const std::mutex &getMutexPost() {
+        return mutex_post;
+    }
+
 public:
     const std::vector<post *> &getPosts() const;
 
@@ -34,6 +39,4 @@ public:
 
     bool operator!=(const topic &rhs) const;
 };
-
-
 #endif //TCP_CLIENT_SERVER_TOPIC_H

@@ -43,7 +43,7 @@ public:
 
     bool isConnected() { return m_isConnected; }
 
-    void setThreadHandler(std::function<void(void)> func) { m_threadHandler = new std::thread(func); }
+    void setThreadHandler(std::function<void()> func) { m_threadHandler = new std::thread(func); }
 
     bool operator==(const Client &rhs) const;
 
