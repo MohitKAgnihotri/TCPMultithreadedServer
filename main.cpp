@@ -84,18 +84,14 @@ void process_incoming_message(const Client *client, const char *msg, size_t size
             std::cout << "Read post id: " << read.getPostId() << std::endl;
 #endif
             std::string post_message = my_message_board.Read(read.getTopicId(), read.getPostId());
-            if (post_message.length() != 0)
-            {
+            if (post_message.length() != 0) {
                 pipe_ret_t ret = server.sendToClient(client, post_message.c_str(), post_message.length());
-                if (!ret.success)
-                {
+                if (!ret.success) {
                     std::cout << "failed to send message to the client" << ret.msg << client->getFileDescriptor()
                               << std::endl;
                     server.sendToClient(client, post_message.c_str(), post_message.length());
                 }
-            }
-            else
-            {
+            } else {
                 std::string failed_response("No such post found");
                 pipe_ret_t ret = server.sendToClient(client, failed_response.c_str(), failed_response.length());
                 if (!ret.success) {
@@ -114,23 +110,8 @@ void process_incoming_message(const Client *client, const char *msg, size_t size
 #ifdef DEBUG
             std::cout << "Exit request: " << exitReq.toString() << std::endl;
 #endif
-#if 0
-            for (auto item_topic:my_message_board.getMessageBoard())
-            {
-                for (auto item : item_topic->getPosts())
-                {
-                    free(item);
-                }
-                free(item_topic);
-            }
-            pipe_ret_t ret = server.finish();
-            if (ret.success)
-            {
-                server.sendToClient(client,msgStr.c_str(), msgStr.length());
-                kill(getppid(), SIGEV_SIGNAL);
-            }
-#endif
             server.sendToClient(client, msgStr.c_str(), msgStr.length());
+            std::terminate();
         }
     } else {
         std::cout << "Invalid Request" << msgStr << std::endl;

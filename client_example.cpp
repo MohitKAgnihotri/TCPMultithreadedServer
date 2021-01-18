@@ -195,15 +195,15 @@ int main(int argc, char *argv[]) {
     std::vector<std::thread> read_req_threads;
 
     for (int i = 0; i < num_of_post_thread; i++) {
-        post_req_threads.push_back(std::move(std::thread(&send_post_req)));
+        post_req_threads.push_back(std::thread(&send_post_req));
     }
 
     for (int i = 0; i < num_of_read_thread; i++) {
-        read_req_threads.push_back(std::move(std::thread(&send_read_req)));
+        read_req_threads.push_back(std::thread(&send_read_req));
     }
 
-    for (int i = 0; i < post_req_threads.size(); i++)
+    for (long unsigned int i = 0; i < post_req_threads.size(); i++)
         post_req_threads[i].join();
-    for (int i = 0; i < read_req_threads.size(); i++)
+    for (long unsigned int i = 0; i < read_req_threads.size(); i++)
         read_req_threads[i].join();
 }

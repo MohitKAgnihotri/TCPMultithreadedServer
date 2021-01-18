@@ -74,7 +74,6 @@ void TcpServer::receiveTask() {
 bool TcpServer::deleteClient(Client *client)
 {
     const std::lock_guard<std::mutex> lock(TcpServer::mutex_server);
-    //TcpServer::mutex_server.lock();
     auto it = find(m_clients.cbegin(), m_clients.cend(), client);
     if (it != m_clients.cend()) {
         m_clients.erase(it);
@@ -216,8 +215,8 @@ pipe_ret_t TcpServer::sendToClient(const Client *client, const char *msg, size_t
     }
     if ((uint) numBytesSent < size) { // not all bytes were sent
         ret.success = false;
-        char msg[100];
-        sprintf(msg, "Only %d bytes out of %lu was sent to client", numBytesSent, size);
+        char errormsg[100];
+        sprintf(errormsg, "Only %d bytes out of %lu was sent to client", numBytesSent, size);
         ret.msg = msg;
         return ret;
     }

@@ -27,6 +27,7 @@ topic *message_board::getTopic(std::string usertopic) {
 }
 
 void message_board::createNewTopic(std::string topicStr) {
+    const std::lock_guard<std::mutex> lock(message_board::mutex_msgboard);
     topic *pTopic = new topic(topicStr);
     _message_board.push_back(pTopic);
 }
@@ -41,19 +42,19 @@ bool message_board::operator!=(const message_board &rhs) const {
 
 unsigned int message_board::Post(std::string usertopic, std::string message) {
     unsigned int postId = 0;
-    const std::lock_guard<std::mutex> lock(message_board::mutex_msgboard);
-    //message_board::mutex_msgboard.lock();
-    if (this->isTopicExist(usertopic)) {
+    if (this->isTopicExist(usertopic))
+    {
         topic *curr_topic = this->getTopic(usertopic);
         postId = curr_topic->getPosts().size();
         curr_topic->insertPost(postId, message);
-    } else {
+    }
+    else
+    {
         this->createNewTopic(usertopic);
         topic *curr_topic = this->getTopic(usertopic);
         postId = curr_topic->getPosts().size();
         curr_topic->insertPost(postId, message);
     }
-    //message_board::mutex_msgboard.unlock();
     return postId;
 }
 
@@ -72,14 +73,13 @@ std::string message_board::List() {
         topic_list.append("#");
     }
     return topic_list;
-
 }
 
 std::string message_board::Read(std::string userTopic, unsigned int i) {
     std::string post("");
     if (this->isTopicExist(userTopic)) {
         topic *curr_topic = this->getTopic(userTopic);
-        if (curr_topic->getPosts().size() > i) {
+        if (curr_topic != nullptr &&  curr_topic->getPosts().size() > i) {
             post = curr_topic->getPosts()[i]->getMessage();
         }
     }
