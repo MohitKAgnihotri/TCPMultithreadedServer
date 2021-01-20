@@ -9,11 +9,30 @@
 std::mutex message_board::mutex_msgboard;
 
 bool message_board::isTopicExist(std::string topic) {
-    for (auto item: this->getMessageBoard()) {
+#if 0
+    auto copy_mess_board = _message_board;
+    auto it = copy_mess_board.begin();
+    unsigned int counter = 0;
+    const auto size = copy_mess_board.size();
+    while (it != copy_mess_board.end())
+    {
+        if ((*it)->getTopic() == topic) {
+            return true;
+        }
+
+        if (counter > size)
+            throw 1;
+
+        ++it;
+        counter++;
+    }
+#else
+    for (auto item: _message_board) {
         if (item->getTopic() == topic) {
             return true;
         }
     }
+#endif
     return false;
 }
 

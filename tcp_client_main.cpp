@@ -1,6 +1,3 @@
-///////////////////////////////////////////////////////////
-/////////////////////CLIENT EXAMPLE////////////////////////
-///////////////////////////////////////////////////////////
 
 #include <iostream>
 #include <unistd.h>
@@ -31,8 +28,11 @@ int ConnectToServer();
 
 void SendReqToServer(int sockfd, const std::string &post_request);
 
+/* Function to create strings of given length
+ * */
 std::string random_string(std::string::size_type length)
 {
+    // Constant look-up table
     static auto& chrs = "0123456789"
                         "abcdefghijklmnopqrstuvwxyz"
                         "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -41,7 +41,6 @@ std::string random_string(std::string::size_type length)
     thread_local static std::uniform_int_distribution<std::string::size_type> pick(0, sizeof(chrs) - 2);
 
     std::string s;
-
     s.reserve(length);
 
     while(length--)
