@@ -1,7 +1,7 @@
 
 #include <algorithm>
 #include <vector>
-#include "topic.h"
+#include <mutex>
 #include "message_board.h"
 
 std::mutex message_board::mutex_msgboard;

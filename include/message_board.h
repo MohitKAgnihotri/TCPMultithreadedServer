@@ -2,7 +2,6 @@
 #ifndef TCP_CLIENT_SERVER_MESSAGE_BOARD_H
 #define TCP_CLIENT_SERVER_MESSAGE_BOARD_H
 
-#include "topic.h"
 #include <unordered_map>
 
 class message_board {

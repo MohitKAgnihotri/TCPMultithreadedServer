@@ -13,7 +13,7 @@ add_executable(tcp_server
         src/client.cpp
         src/RequestParser.cpp
         tcp_server_main.cpp
-        src/message_board.cpp include/message_board.h src/topic.cpp include/topic.h src/post.cpp include/post.h)
+        src/message_board.cpp include/message_board.h)
 
 add_executable(tcp_client
         tcp_client_main.cpp
