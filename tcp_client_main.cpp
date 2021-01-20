@@ -13,6 +13,7 @@
 #include <cstring>
 #include<chrono>
 #include <random>
+#include <mutex>
 #include "pipe_ret_t.h"
 
 #define MAX_PACKET_SIZE 4096
@@ -23,6 +24,8 @@ int num_of_post_thread;
 int num_of_read_thread;
 int time_to_test;
 int topic_message_len;
+
+std::mutex mutex_thread_print;
 
 int ConnectToServer();
 
@@ -151,9 +154,11 @@ void send_post_req(void)
         message_cnt++;
     }
 
+    mutex_thread_print.lock();
     std::cout << "Post ThreadId = " << std::this_thread::get_id() << " Sent " << message_cnt << " in "
               << std::chrono::duration_cast<std::chrono::seconds>(std::chrono::system_clock::now() - start).count()
               << "seconds " << std::endl;
+    mutex_thread_print.unlock();
     close(sockfd);
 }
 
@@ -170,9 +175,11 @@ void send_read_req(void) {
         SendReqToServer(sockfd, post_request);
         message_cnt++;
     }
+    mutex_thread_print.lock();
     std::cout << "Read ThreadId = " << std::this_thread::get_id() << " Sent " << message_cnt << " in "
               << std::chrono::duration_cast<std::chrono::seconds>(std::chrono::system_clock::now() - start).count()
               << "seconds " << std::endl;
+    mutex_thread_print.unlock();
     close(sockfd);
 }
 
