@@ -10,19 +10,19 @@ class message_board {
     static std::mutex mutex_msgboard;
 public:
 
-    std::string Read(std::string userTopic, unsigned int i);
+    std::string Read(const std::string& userTopic, unsigned int i);
 
     std::string List();
 
-    unsigned int Count(std::string usertopic);
+    unsigned int Count(const std::string& usertopic);
 
-    unsigned int Post(std::string usertopic, std::string message);
+    unsigned int Post(const std::string& usertopic, const std::string& message);
 
-    void createNewPost(std::string topicStr, std::string message);
+    void createNewPost(const std::string& topicStr, const std::string& message);
 
-    void createNewTopic(std::string topicStr);
+    void createNewTopic(const std::string& topicStr);
 
-    bool isTopicExist(std::string topic);
+    bool isTopicExist(const std::string& topic);
 };
 
 

@@ -6,23 +6,23 @@
 
 std::mutex message_board::mutex_msgboard;
 
-bool message_board::isTopicExist(std::string topic) {
+bool message_board::isTopicExist(const std::string &topic) {
     return (_message_board_map.count(topic) > 0);
 }
 
-void message_board::createNewTopic(std::string topicStr) {
+void message_board::createNewTopic(const std::string &topicStr) {
     const std::lock_guard<std::mutex> lock(message_board::mutex_msgboard);
     std::vector<std::string> post_vector = { };
     _message_board_map.insert({topicStr, post_vector});
 }
 
-void message_board::createNewPost(std::string topicStr, std::string message) {
+void message_board::createNewPost(const std::string &topicStr, const std::string &message) {
     const std::lock_guard<std::mutex> lock(message_board::mutex_msgboard);
     _message_board_map[topicStr].push_back(message);
 }
 
-unsigned int message_board::Post(std::string usertopic, std::string message) {
-    unsigned int postId = 0;
+unsigned int message_board::Post(const std::string &usertopic, const std::string &message) {
+    unsigned int postId;
     if (this->isTopicExist(usertopic))
     {
         postId = _message_board_map[usertopic].size();
@@ -37,7 +37,7 @@ unsigned int message_board::Post(std::string usertopic, std::string message) {
     return postId;
 }
 
-unsigned int message_board::Count(std::string usertopic)
+unsigned int message_board::Count(const std::string &usertopic)
 {
     const std::lock_guard<std::mutex> lock(message_board::mutex_msgboard);
     if (this->isTopicExist(usertopic)) {
@@ -50,16 +50,16 @@ unsigned int message_board::Count(std::string usertopic)
 std::string message_board::List() {
     std::string topic_list;
     const std::lock_guard<std::mutex> lock(message_board::mutex_msgboard);
-    for (auto item:_message_board_map) {
+    for (const auto& item:_message_board_map) {
         topic_list.append(item.first);
         topic_list.append("#");
     }
     return topic_list;
 }
 
-std::string message_board::Read(std::string userTopic, unsigned int i) {
+std::string message_board::Read(const std::string &userTopic, unsigned int i) {
     const std::lock_guard<std::mutex> lock(message_board::mutex_msgboard);
-    std::string post("");
+    std::string post;
     if (isTopicExist(userTopic))
     {
         if (_message_board_map[userTopic].size() > i) {
