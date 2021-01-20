@@ -58,7 +58,7 @@ void TcpServer::receiveTask() {
             }
             close(client->getFileDescriptor());
             publishClientDisconnected(client);
-            //deleteClient(client);
+            deleteClient(client);
             break;
         } else {
             publishClientMsg(client, msg, numOfBytesReceived);
@@ -89,7 +89,9 @@ bool TcpServer::deleteClient(Client *client)
  * the specific observer requested IP
  */
 void TcpServer::publishClientMsg(const Client *client, const char *msg, size_t msgSize) {
-    for (uint i = 0; i < m_subscibers.size(); i++) {
+    const std::lock_guard<std::mutex> lock(TcpServer::mutex_server);
+    for (uint i = 0; i < m_subscibers.size(); i++)
+    {
         if (m_subscibers[i].wantedIp == client->getIp() || m_subscibers[i].wantedIp.empty()) {
             if (m_subscibers[i].incoming_packet_func != NULL) {
                 (*m_subscibers[i].incoming_packet_func)(client, msg, msgSize);
@@ -104,9 +106,11 @@ void TcpServer::publishClientMsg(const Client *client, const char *msg, size_t m
  * with IP address identical to the specific
  * observer requested IP
  */
-void TcpServer::publishClientDisconnected(const Client *client) {
+void TcpServer::publishClientDisconnected(const Client *client)
+{
+    const std::lock_guard<std::mutex> lock(TcpServer::mutex_server);
     for (uint i = 0; i < m_subscibers.size(); i++) {
-        if (m_subscibers[i].wantedIp == client->getIp()) {
+        if (m_subscibers[i].wantedIp == client->getIp() || m_subscibers[i].wantedIp.empty()) {
             if (m_subscibers[i].disconnected_func != NULL) {
                 (*m_subscibers[i].disconnected_func)(client);
             }
@@ -190,6 +194,7 @@ Client *TcpServer::acceptClient(void) {
  * Return true if message was sent successfully to all clients
  */
 pipe_ret_t TcpServer::sendToAllClients(const char * msg, size_t size) {
+    const std::lock_guard<std::mutex> lock(TcpServer::mutex_server);
     pipe_ret_t ret;
     for (uint i=0; i<m_clients.size(); i++) {
         ret = sendToClient(m_clients[i], msg, size);
@@ -229,7 +234,6 @@ pipe_ret_t TcpServer::sendToClient(const Client *client, const char *msg, size_t
  * Return true is success, false otherwise
  */
 pipe_ret_t TcpServer::finish() {
-
     const std::lock_guard<std::mutex> lock(TcpServer::mutex_server);
     pipe_ret_t ret;
     for (uint i=0; i<m_clients.size(); i++)

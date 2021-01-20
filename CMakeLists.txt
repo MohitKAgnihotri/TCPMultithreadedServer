@@ -4,7 +4,7 @@ project(tcp_client_server)
 find_package (Threads)
 
 set(CMAKE_CXX_STANDARD 11)
-set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} "-g3 -O0 -Wall -Werror -Wpedantic -std=c++11 -pthread")
+set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} "-g0 -O2 -Wall -Werror -Wpedantic -std=c++11 -pthread")
 
 include_directories(include)
 
