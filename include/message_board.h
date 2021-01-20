@@ -1,36 +1,28 @@
-//
-// Created by 310165137 on 14/01/2021.
-//
 
 #ifndef TCP_CLIENT_SERVER_MESSAGE_BOARD_H
 #define TCP_CLIENT_SERVER_MESSAGE_BOARD_H
 
 #include "topic.h"
+#include <unordered_map>
 
 class message_board {
-    std::vector<topic*> _message_board;
+    std::unordered_map<std::string, std::vector<std::string>> _message_board_map;
     static std::mutex mutex_msgboard;
 public:
-    const std::vector<topic *> &getMessageBoard() const;
 
-public:
-    bool isTopicExist(std::string topic);
-
-    topic * getTopic(std::string);
-
-    void createNewTopic(std::string);
-
-    bool operator==(const message_board &rhs) const;
-
-    bool operator!=(const message_board &rhs) const;
-
-    unsigned int Post(std::string basicString, std::string basicString1);
+    std::string Read(std::string userTopic, unsigned int i);
 
     std::string List();
 
-    unsigned int Count(std::string basicString);
+    unsigned int Count(std::string usertopic);
 
-    std::string Read(std::string basicString, unsigned int i);
+    unsigned int Post(std::string usertopic, std::string message);
+
+    void createNewPost(std::string topicStr, std::string message);
+
+    void createNewTopic(std::string topicStr);
+
+    bool isTopicExist(std::string topic);
 };
 
 

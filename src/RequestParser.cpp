@@ -14,10 +14,10 @@ PostRequest::PostRequest() : valid(0)
 PostRequest::~PostRequest()
 { }
 
-PostRequest PostRequest::parse(std::string request)
+PostRequest PostRequest::parse(const std::string request)
 {
     const std::lock_guard<std::mutex> lock(PostRequest::mutex_post_request);
-	std::regex postRegex("^POST(@[^@#]*)#(.+)$");
+	const std::regex postRegex("^POST(@[^@#]*)#(.+)$");
     std::smatch postMatch;
     PostRequest post;
 
@@ -59,10 +59,10 @@ ReadRequest::ReadRequest() : valid(0)
 ReadRequest::~ReadRequest()
 { }
 
-ReadRequest ReadRequest::parse(std::string request)
+ReadRequest ReadRequest::parse(const std::string request)
 {
     const std::lock_guard<std::mutex> lock(ReadRequest::mutex_read_request);
-	std::regex readRegex("^READ(@[^@#]*)#([0-9]+)$");
+	const std::regex readRegex("^READ(@[^@#]*)#([0-9]+)$");
     std::smatch readMatch;
     ReadRequest read;
 
@@ -102,10 +102,10 @@ CountRequest::CountRequest() : valid(0)
 CountRequest::~CountRequest()
 { }
 
-CountRequest CountRequest::parse(std::string request)
+CountRequest CountRequest::parse(const std::string request)
 {
     const std::lock_guard<std::mutex> lock(CountRequest::mutex_count_request);
-	std::regex countRegex("^COUNT(@[^@#]*)$");
+	const std::regex countRegex("^COUNT(@[^@#]*)$");
     std::smatch countMatch;
     CountRequest count;
 
@@ -139,10 +139,10 @@ ListRequest::ListRequest() : valid(0)
 ListRequest::~ListRequest()
 { }
 
-ListRequest ListRequest::parse(std::string request)
+ListRequest ListRequest::parse(const std::string request)
 {
     const std::lock_guard<std::mutex> lock(ListRequest::mutex_list_request);
-	std::regex listRegex("^LIST$");
+	const std::regex listRegex("^LIST$");
 	std::smatch listMatch;
 	ListRequest list;
 
@@ -169,10 +169,10 @@ ExitRequest::ExitRequest() : valid(0)
 ExitRequest::~ExitRequest()
 { }
 
-ExitRequest ExitRequest::parse(std::string request)
+ExitRequest ExitRequest::parse(const std::string request)
 {
     const std::lock_guard<std::mutex> lock(ExitRequest::mutex_exit_request);
-	std::regex exitRegex("^EXIT$");
+	const std::regex exitRegex("^EXIT$");
 	std::smatch exitMatch;
 	ExitRequest exitReq;
 
