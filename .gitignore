@@ -53,3 +53,8 @@ Mkfile.old
 dkms.conf
 /cmake-build-debug/
 /.idea/deployment.xml
+TCPClient/.vs
+TCPClient/TCPClient/x64
+TCPClient/TCPClient/desktop.ini
+TCPServer/.vs
+TCPServer/TCPServer/x64

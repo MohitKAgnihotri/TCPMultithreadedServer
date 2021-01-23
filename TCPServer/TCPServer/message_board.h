@@ -3,6 +3,7 @@
 #define TCP_CLIENT_SERVER_MESSAGE_BOARD_H
 
 #include <unordered_map>
+#include <mutex>
 
 class message_board {
     std::unordered_map<std::string, std::vector<std::string>> _message_board_map;

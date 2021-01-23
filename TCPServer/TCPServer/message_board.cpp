@@ -10,6 +10,7 @@ std::mutex message_board::mutex_msgboard;
  * Check if the key exist in the map, if yes, then the topic exist else not
  * */
 bool message_board::isTopicExist(const std::string &topic) {
+    const std::lock_guard<std::mutex> lock(message_board::mutex_msgboard);
     return (_message_board_map.count(topic) > 0);
 }
 
@@ -86,10 +87,11 @@ std::string message_board::List() {
  * This is used to retrieve a specific post for a given topic
  * */
 std::string message_board::Read(const std::string &userTopic, unsigned int i) {
-    const std::lock_guard<std::mutex> lock(message_board::mutex_msgboard);
+    
     std::string post;
     if (isTopicExist(userTopic))
     {
+        const std::lock_guard<std::mutex> lock(message_board::mutex_msgboard);
         if (_message_board_map[userTopic].size() > i) {
             post =_message_board_map[userTopic][i];
         }
