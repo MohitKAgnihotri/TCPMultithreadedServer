@@ -63,7 +63,8 @@ std:: string GetReadRequest(std::string::size_type length, unsigned int post_ind
     return std::string("READ@") + random_string(length) + std::string("#") + std::to_string(post_index);
 }
 
-int ConnectToServer() {
+int ConnectToServer()
+{
     int sockfd = 0;
     struct sockaddr_in server;
     pipe_ret_t ret;
@@ -114,7 +115,8 @@ void SendReqToServer(int sockfd, const std::string &post_request) {
         exit(0);
     }
 
-    if ((uint) numBytesSent < post_request.size()) { // not all bytes were sent
+    if ((uint) numBytesSent < post_request.size())
+    { // not all bytes were sent
         ret.success = false;
         char msg[100];
         sprintf(msg, "Only %d bytes out of %lu was sent to client", numBytesSent, post_request.size());
@@ -125,17 +127,23 @@ void SendReqToServer(int sockfd, const std::string &post_request) {
     char msg[MAX_PACKET_SIZE];
     memset(msg, 0x00, sizeof(char) * MAX_PACKET_SIZE);
     int numOfBytesReceived = recv(sockfd, msg, MAX_PACKET_SIZE, 0);
-    if (numOfBytesReceived < 1) {
+    if (numOfBytesReceived < 1)
+    {
         pipe_ret_t ret;
         ret.success = false;
-        if (numOfBytesReceived == 0) { //server closed connection
+        if (numOfBytesReceived == 0)
+        { //server closed connection
             ret.msg = "Server closed connection";
             exit(0);
-        } else {
+        }
+        else
+        {
             ret.msg = strerror(errno);
             std::cout << ret.msg << std::endl;
         }
-    } else {
+    }
+    else
+    {
         //std::cout << msg << std::endl;
     }
 }
