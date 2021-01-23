@@ -10,7 +10,7 @@ PostRequest::~PostRequest()
 
 PostRequest PostRequest::parse(std::string request)
 {
-	std::regex postRegex("^POST(@[^@#]*)#(.+)$");
+	std::regex postRegex("^POST(@[^@#]*)#(.+)$", std::regex::optimize);
 	std::smatch postMatch;
 	PostRequest post;
 
@@ -50,7 +50,7 @@ ReadRequest::~ReadRequest()
 
 ReadRequest ReadRequest::parse(std::string request)
 {
-	std::regex readRegex("^READ(@[^@#]*)#([0-9]+)$");
+	std::regex readRegex("^READ(@[^@#]*)#([0-9]+)$", std::regex::optimize);
 	std::smatch readMatch;
 	ReadRequest read;
 
@@ -90,7 +90,7 @@ CountRequest::~CountRequest()
 
 CountRequest CountRequest::parse(std::string request)
 {
-	std::regex countRegex("^COUNT(@[^@#]*)$");
+	std::regex countRegex("^COUNT(@[^@#]*)$", std::regex::optimize);
 	std::smatch countMatch;
 	CountRequest count;
 
@@ -124,7 +124,7 @@ ListRequest::~ListRequest()
 
 ListRequest ListRequest::parse(std::string request)
 {
-	std::regex listRegex("^LIST$");
+	std::regex listRegex("^LIST$", std::regex::optimize);
 	std::smatch listMatch;
 	ListRequest list;
 
@@ -152,7 +152,7 @@ ExitRequest::~ExitRequest()
 
 ExitRequest ExitRequest::parse(std::string request)
 {
-	std::regex exitRegex("^EXIT$");
+	std::regex exitRegex("^EXIT$", std::regex::optimize);
 	std::smatch exitMatch;
 	ExitRequest exitReq;
 

@@ -1,11 +1,8 @@
 
 #include <iostream>
 #include <string>
-#include <sys/types.h>
 #include <vector>
-#include <errno.h>
 #include <thread>
-#include <cstring>
 #include<chrono>
 #include <random>
 #include <mutex>
